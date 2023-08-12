@@ -22,6 +22,7 @@ const handleErrors = (err)=>{
     return errors
 }
 
+
 module.exports.register_get = async (req, res)=>{
 
 }
