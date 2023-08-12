@@ -1,46 +1,31 @@
 const  mongoose  = require("mongoose");
+const {isEmail} = require("validator");
+const bcrypt = require('bcrypt')
+
 
 const userSchema = new mongoose.Schema({
   fullName: {
     type: String,
-    required: true,
+    required: [true,'please enter your fullname'],
     unique: true,
   },
   email: {
     type: String,
-    required: true,
+    required: [true, 'please enter your email'],
     unique: true,
     lowercase: true,
+    validate:[isEmail, 'please enter a valid email']
   },
-  walletAddress: {
-    type: String,
-    required: true,
-    unique: true,
-    validate:{
-        validator: function (v) {
-            // Replace with actual Ethereum address validation regex
-            return /^0x[a-fA-F0-9]{40}$/.test(v);
-          },
-          message: "Invalid wallet address",
-        },
-    },
-  
   password: {
     type: String,
-    required: true,
+    required: [true, 'please enter a password'],
     unique: true,
+    minlength: [8,'minimum password length is 8 character']
     
-    validate: {
-      validator: function (v) {
-        return /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/.test(v);
-         
-      },
-      message: "Password must contain at least 8 characters, one number, one lowercase letter, and one uppercase letter",
-    },
   },
   countryOfResidence: {
     type: String,
-    required: true,
+    required: [true, 'please enter your country of residence'],
   },
   role: {
     type: String,
@@ -54,8 +39,19 @@ const userSchema = new mongoose.Schema({
       message:"Invalid role value: {VALUE}",
     },
   },
-  timestamps: true,
-});
-const User = mongoose.model("User", userSchema);
+  
+},
+{
+ timestamps:true  
+}
+);
 
-module.exports = { User };
+userSchema.pre('save', async function (next){
+  const salt = await bcrypt.genSalt()
+  this.password = await bcrypt.hash(this.password,salt)
+  next()
+})
+
+const User = mongoose.model("user", userSchema);
+
+module.exports = {User}
