@@ -3,14 +3,15 @@ const bodyParser = require("body-parser");
 const { useTreblle } = require("treblle");
 const mongoose = require("mongoose");
 require("dotenv").config();
-
 const route = require("./routes/userRoutes");
+const cookieParser = require('cookie-parser')
 
 const app = express();
 
 //middleware
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json({ extended: false }));
+app.use(cookieParser());
 
 //Database
 const dbURI = process.env.MONGO_URI;
