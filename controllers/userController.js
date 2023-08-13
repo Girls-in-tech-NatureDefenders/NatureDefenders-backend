@@ -1,6 +1,8 @@
 const {User}  = require("../models/userModel");
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
+const secret = process.env.MY_SECRET
+// const tokenAge = 100 * 60 * 60 * 24; // 24 hour
 
 //handle errors
 const handleErrors = (err)=>{
@@ -21,7 +23,12 @@ const handleErrors = (err)=>{
     }
     return errors
 }
-
+const maxAge = 3*24*60*60
+const createToken = (id)=>{
+    return jwt.sign({id}, secret,{
+        expiresIn:maxAge 
+    })
+}
 
 module.exports.register_get = async (req, res)=>{
 
@@ -39,15 +46,16 @@ module.exports.register_post = async(req, res)=>{
         role}= req.body
         
         try{
-
         const user = await User.create({
             fullName,
             email,
             password,
             countryOfResidence,
             role});
+            const token = createToken(user._id)
+            res.cookie('jwt', token,{maxAge: maxAge*1000} )
             console.log('user created')
-    res.status(201).json(user)
+    res.status(201).json({user:user._id})
     
     }
     
@@ -57,6 +65,13 @@ module.exports.register_post = async(req, res)=>{
     }
 }
 
-module.exports.login_post =(req, res)=>{
+module.exports.login_post = async(req, res)=>{
+  const {email, password} = req.body
+  
+  try {
+    const user = await User.login(email, password)
+    res.status(200).json({user: user._id})
+  } catch (err) {
     
+  }
 }
