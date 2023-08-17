@@ -1,36 +1,37 @@
 const {User}  = require("../models/userModel");
 const jwt = require('jsonwebtoken')
-const bcrypt = require('bcrypt')
+const bcrypt = require('bcrypt');
+const { handleErrors } = require("../errorResponse/handleErrors");
 const secret = process.env.MY_SECRET
 // const tokenAge = 100 * 60 * 60 * 24; // 24 hour
 
 //handle errors
-const handleErrors = (err)=>{
-    console.log(err.message, err.code)
-    let errors = { fullName:'', email:'', password:'', countryOfResidence:'', role:''}
+// const handleErrors = (err)=>{
+//     console.log(err.message, err.code)
+//     let errors = { fullName:'', email:'', password:'', countryOfResidence:'', role:''}
     
-    //incorrect email and password error handler
-    if(err.message === 'incorrect email'){
-        errors.email = 'that email is not registered'
-    }
-    if(err.message === 'incorrect password'){
-        errors.password = 'that password is incorrect'
-    }
+//     //incorrect email and password error handler
+//     if(err.message === 'incorrect email'){
+//         errors.email = 'that email is not registered'
+//     }
+//     if(err.message === 'incorrect password'){
+//         errors.password = 'that password is incorrect'
+//     }
 
 
-    //duplicate error code
-    if(err.code ===11000){
-        errors = 'user already exist'
-        return errors
-    }
-    //validation errors
-    if (err.message.includes('User validation failed')){
-        (Object.values(err.errors)).forEach(({properties}) =>{
-        errors[properties.path] = properties.message
-        })
-    }
-    return errors
-}
+//     //duplicate error code
+//     if(err.code ===11000){
+//         errors = 'user already exist'
+//         return errors
+//     }
+//     //validation errors
+//     if (err.message.includes('User validation failed')){
+//         (Object.values(err.errors)).forEach(({properties}) =>{
+//         errors[properties.path] = properties.message
+//         })
+//     }
+//     return errors
+// }
 const maxAge = 3*24*60*60
 const createToken = (id)=>{
     return jwt.sign({id}, secret,{
@@ -38,9 +39,6 @@ const createToken = (id)=>{
     })
 }
 
-module.exports.register_get = async (req, res)=>{
-
-}
 
 module.exports.login_get =(req, res)=>{
     
@@ -87,7 +85,7 @@ module.exports.login_post = async(req, res)=>{
   }
 }
 
-module.exports.logout_get=(reg, res) =>{
+module.exports.logout_get=(req, res) =>{
     res.cookie('jwt','',{maxAge:1})
     res.redirect('/')
 }

@@ -38,6 +38,6 @@ companyName:{
 }
 });
 
-const Project = mongoose.model("project", userSchema);
+const Project = mongoose.model("project", projectSchema);
 
-module.exports = {project}
+module.exports = {Project}
