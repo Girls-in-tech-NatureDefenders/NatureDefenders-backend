@@ -3,8 +3,9 @@ const bodyParser = require("body-parser");
 const { useTreblle } = require("treblle");
 const mongoose = require("mongoose");
 require("dotenv").config();
-const route = require("./routes/userRoutes");
-const cookieParser = require('cookie-parser')
+const userRoutes = require("./routes/userRoutes");
+const cookieParser = require('cookie-parser');
+const projectRoutes = require("./routes/projectRoutes");
 
 const app = express();
 
@@ -37,7 +38,8 @@ app.get("/api/healthchecker", (req, res) => {
 });
 
 //userRoute router
-app.use("/", route);
+app.use("/users", userRoutes);
+app.use("/projects", projectRoutes);
 
 const port = process.env.PORT || 4000;
 app.listen(port, () => {
