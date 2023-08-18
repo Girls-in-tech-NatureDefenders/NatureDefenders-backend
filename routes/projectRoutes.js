@@ -4,7 +4,7 @@ const route = express.Router();
 
 route.get('/', projectController.getAllProjects);
 route.get('/:projectId', projectController.getProjectById);
-route.post('/', projectController.createProject);
+route.post('/create', projectController.createProject);
 
 
 module.exports = route

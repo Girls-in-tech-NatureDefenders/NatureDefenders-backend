@@ -33,8 +33,7 @@ module.exports.register_post = async(req, res)=>{
             email,
             password,
             countryOfResidence,
-            role: selectedRole,
-        });
+            role: selectedRole,});
             const token = createToken(user._id)
             res.cookie('jwt', token,{maxAge: maxAge*1000} )
             console.log('user created')
