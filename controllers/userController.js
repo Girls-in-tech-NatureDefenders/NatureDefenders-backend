@@ -25,7 +25,7 @@ module.exports.register_post = async(req, res)=>{
         email,
         password,
         countryOfResidence,
-        role}= req.body
+        selectedRole}= req.body
         
         try{
         const user = await User.create({
@@ -33,7 +33,8 @@ module.exports.register_post = async(req, res)=>{
             email,
             password,
             countryOfResidence,
-            role});
+            role: selectedRole,
+        });
             const token = createToken(user._id)
             res.cookie('jwt', token,{maxAge: maxAge*1000} )
             console.log('user created')
