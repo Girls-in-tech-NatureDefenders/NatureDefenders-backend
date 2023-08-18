@@ -1,4 +1,4 @@
-const { project } = require("../models/projectModel");
+const { Project } = require("../models/projectModel");
 const { User } = require("../models/userModel");
 
 module.exports.getAllProjects = async (req, res) => {
@@ -42,7 +42,7 @@ module.exports.getProjectById = async (req, res) => {
     try {
       const userId = req.user.id;
 
-      const project =  await Project.create({
+      const projects =  await Project.create({
         companyName, 
         companyLocations, 
         contactInformation, 
@@ -56,9 +56,9 @@ module.exports.getProjectById = async (req, res) => {
         walletAddress,
         estimatedAmount,
         fundingGoals,
-        createdBy: userId 
+        creator: userId 
       });
-      res.status(201).json(project);
+      res.status(201).json(projects);
 
     } catch (error) {
       res.status(400).json({ error: 'cannot create project' });
