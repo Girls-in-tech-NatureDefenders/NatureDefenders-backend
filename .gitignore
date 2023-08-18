@@ -1,2 +1,3 @@
 node_modules/*
 .env
+middleware/authorizeAdmin.js
