@@ -4,10 +4,6 @@ const bcrypt = require('bcrypt');
 const { handleErrors } = require("../errorResponse/handleErrors");
 const secret = process.env.MY_SECRET
 
-
-
-
-
 const maxAge = 3*24*60*60
 const createToken = (id)=>{
     return jwt.sign({id}, secret,{
