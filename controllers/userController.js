@@ -12,9 +12,9 @@ const createToken = (id, role)=>{
 }
 
 
-module.exports.login_get =(req, res)=>{
+// module.exports.login_get =(req, res)=>{
     
-}
+// }
 module.exports.register_post = async(req, res)=>{
     const {
         fullName,

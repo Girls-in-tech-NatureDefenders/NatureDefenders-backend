@@ -8,7 +8,7 @@ The base URL for all endpoints is: `https://nature-defenders.onrender.com/`
 
 ## User Registration
 
-### `POST /register`
+### `POST /users/register`
 
 **Request Body:**
 
