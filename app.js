@@ -6,6 +6,8 @@ require("dotenv").config();
 const userRoutes = require("./routes/userRoutes");
 const cookieParser = require('cookie-parser');
 const projectRoutes = require("./routes/projectRoutes");
+const { requireAuth, authorizeAdmin } = require("./middleware/auth");
+
 
 const app = express();
 
@@ -13,6 +15,12 @@ const app = express();
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json({ extended: false }));
 app.use(cookieParser());
+
+//debugging middleware for looging cookies
+app.use((req, res, next) => {
+  console.log("cookies",req.cookies);
+  next();
+});
 
 //Database
 const dbURI = process.env.MONGO_URI;
@@ -36,6 +44,13 @@ app.get("/api/healthchecker", (req, res) => {
     message: "Welcome to NatureDefender",
   });
 });
+
+// Middleware: Require Authentication
+app.use("/projects", requireAuth);
+
+// Middleware: Admin Authorization
+app.use("/projects/create", authorizeAdmin);
+
 
 //userRoute router
 app.use("/users", userRoutes);

@@ -5,8 +5,8 @@ const { handleErrors } = require("../errorResponse/handleErrors");
 const secret = process.env.MY_SECRET
 
 const maxAge = 3*24*60*60
-const createToken = (id)=>{
-    return jwt.sign({id}, secret,{
+const createToken = (id, role)=>{
+    return jwt.sign({id, role}, secret,{
         expiresIn:maxAge 
     })
 }
@@ -30,7 +30,7 @@ module.exports.register_post = async(req, res)=>{
             password,
             countryOfResidence,
             role: selectedRole,});
-            const token = createToken(user._id)
+            const token = createToken(user._id, user.role)
             res.cookie('jwt', token,{maxAge: maxAge*1000} )
             console.log('user created')
     res.status(201).json({user:user._id})
@@ -49,7 +49,7 @@ module.exports.login_post = async(req, res)=>{
   
   try {
     const user = await User.login(email, password)
-    const token = createToken(user._id)
+    const token = createToken(user._id, user.role)
             res.cookie('jwt', token,{maxAge: maxAge*1000} )
     res.status(200).json({user: user._id})
   } catch (err) {

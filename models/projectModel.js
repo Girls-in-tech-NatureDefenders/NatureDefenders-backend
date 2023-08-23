@@ -53,9 +53,9 @@ const projectSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
-    creator: {
+    createdBy: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
+      ref: "user",
       required: true,
     },
 

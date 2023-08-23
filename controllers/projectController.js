@@ -60,16 +60,11 @@ module.exports.createProject = async (req, res) => {
   } = req.body;
 
   try {
-    const userId = req.user._id;
+    console.log("req.user:", req.user);
+    const createdBy = req.user._id;
     //check if user exist
-    const user = await User.findById(userId);
-    if (!user) {
-      return res.status(404).json({
-        status: "fail",
-        message: "User not found",
-      });
-    }
-
+    const user = await User.findById(createdBy);
+   
     const projects = await Project.create({
     companyName,
     companyLocation,
@@ -84,7 +79,7 @@ module.exports.createProject = async (req, res) => {
     walletAddress,
     estimatedAmount,
     fundingGoals,
-    creator: req.user._id,
+    createdBy: req.user._id,
     });
     res.status(201).json({
       status: "success",
@@ -92,7 +87,9 @@ module.exports.createProject = async (req, res) => {
         projects,
       },
     });
+    
   } catch (error) {
+    console.error("Error creating project", error)
     res.status(400).json({
       status: "fail",
       error: "cannot create project",
