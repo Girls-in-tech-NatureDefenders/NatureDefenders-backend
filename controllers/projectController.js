@@ -12,7 +12,7 @@ module.exports.getAllProjects = async (req, res) => {
       },
     });
   } catch (error) {
-    res.status(400).json({ 
+    res.status(400).json({
       status: "fail",
       error: "cannot get projects"
     });
@@ -26,7 +26,7 @@ module.exports.getProjectById = async (req, res) => {
       return res.status(404).json({
         status: "fail",
         message: "Project not found",
-       });
+      });
     }
     res.json({
       status: "success",
@@ -35,10 +35,10 @@ module.exports.getProjectById = async (req, res) => {
       },
     });
   } catch (error) {
-    res.status(400).json({ 
+    res.status(400).json({
       status: "fail",
       error: "cannot find project"
-     });
+    });
   }
 };
 
@@ -64,22 +64,22 @@ module.exports.createProject = async (req, res) => {
     const createdBy = req.user._id;
     //check if user exist
     const user = await User.findById(createdBy);
-   
+    console.log(user)
     const projects = await Project.create({
-    companyName,
-    companyLocation,
-    contactInformation,
-    teamBackground,
-    projectTitle,
-    projectDescription,
-    preventiveMeasures,
-    habitationRestoration,
-    pictureUrl,
-    acceptableCurrency,
-    walletAddress,
-    estimatedAmount,
-    fundingGoals,
-    createdBy: req.user._id,
+      companyName,
+      companyLocation,
+      contactInformation,
+      teamBackground,
+      projectTitle,
+      projectDescription,
+      preventiveMeasures,
+      habitationRestoration,
+      pictureUrl,
+      acceptableCurrency,
+      walletAddress,
+      estimatedAmount,
+      fundingGoals,
+      createdBy: req.user.id,
     });
     res.status(201).json({
       status: "success",
@@ -87,12 +87,12 @@ module.exports.createProject = async (req, res) => {
         projects,
       },
     });
-    
+
   } catch (error) {
     console.error("Error creating project", error)
     res.status(400).json({
       status: "fail",
       error: "cannot create project",
-     });
+    });
   }
 };

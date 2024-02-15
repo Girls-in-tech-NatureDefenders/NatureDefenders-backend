@@ -18,16 +18,15 @@ app.use(cookieParser());
 
 //debugging middleware for looging cookies
 app.use((req, res, next) => {
-  console.log("cookies",req.cookies);
   next();
 });
 
 //Database
 const dbURI = process.env.MONGO_URI;
 mongoose.connect(dbURI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+})
   .then(() => console.log("database connected"))
   .catch((err) => console.log(err));
 
@@ -46,10 +45,10 @@ app.get("/api/healthchecker", (req, res) => {
 });
 
 // Middleware: Require Authentication
-app.use("/projects", requireAuth);
+// app.use("/projects", requireAuth);
 
 // Middleware: Admin Authorization
-app.use("/projects/create", authorizeAdmin);
+// app.use("/projects/create", authorizeAdmin);
 
 
 //userRoute router

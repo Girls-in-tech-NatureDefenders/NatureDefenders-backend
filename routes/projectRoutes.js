@@ -7,8 +7,8 @@ const route = express.Router();
 route.get('/', getAllProjects);
 route.get('/:projectId', getProjectById);
 
-// Use requireAuth middleware for routes that require authentication
-route.use(requireAuth);
+
+//route.use(requireAuth);
 
 route.post('/create', authorizeAdmin, createProject);
 

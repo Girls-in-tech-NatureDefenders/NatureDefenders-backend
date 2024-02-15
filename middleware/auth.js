@@ -5,7 +5,7 @@ const { User } = require("../models/userModel");
 // Middleware: Require Authentication
 const requireAuth = async (req, res, next) => {
   const token = req.cookies.jwt;
-  
+
   try {
     // Verify if JWT exists
     if (token) {
@@ -24,9 +24,18 @@ const requireAuth = async (req, res, next) => {
 
 // Middleware: Admin Authorization
 const authorizeAdmin = async (req, res, next) => {
+  const token = req.headers.authorization.split(" ")[1];
+
   try {
+    if (token) {
+      const decodedToken = jwt.verify(token, secret);
+      // Attach user information to request object
+      req.user = decodedToken;
+    } else {
+      throw new Error("No token");
+    }
     // Retrieve user information from the attached token
-    const user = await User.findById(req.user._id);
+    const user = await User.findById(req.user.id);
     if (user.role !== "admin") {
       return res.status(403).json({
         message: "Admin resources cannot be accessed by you",
